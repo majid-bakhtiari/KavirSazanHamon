@@ -1,0 +1,42 @@
+using System;
+using System.Data;
+using System.Data.OleDb;
+using System.Windows.Forms;
+
+namespace KavirSazanHamon
+{
+    public partial class FormUsers : Form
+    {
+        public FormUsers()
+        {
+            InitializeComponent();
+            LoadUsers();
+        }
+
+        private void LoadUsers()
+        {
+            using (OleDbConnection conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                OleDbDataAdapter da = new OleDbDataAdapter("SELECT * FROM Users", conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dataGridView1.DataSource = dt;
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            using (OleDbConnection conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand("INSERT INTO Users (Username, Password, Role) VALUES (?, ?, ?)", conn);
+                cmd.Parameters.AddWithValue("?", txtUsername.Text);
+                cmd.Parameters.AddWithValue("?", txtPassword.Text);
+                cmd.Parameters.AddWithValue("?", txtRole.Text);
+                cmd.ExecuteNonQuery();
+                LoadUsers();
+            }
+        }
+    }
+}
