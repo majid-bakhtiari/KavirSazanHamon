@@ -1,0 +1,37 @@
+using System;
+using System.Data.OleDb;
+using System.Windows.Forms;
+
+namespace KavirSazanHamon
+{
+    public partial class FormLogin : Form
+    {
+        public FormLogin()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            using (OleDbConnection conn = DatabaseHelper.GetConnection())
+            {
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand("SELECT * FROM Users WHERE Username=? AND Password=?", conn);
+                cmd.Parameters.AddWithValue("?", txtUsername.Text);
+                cmd.Parameters.AddWithValue("?", txtPassword.Text);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    MessageBox.Show("ورود موفقیت‌آمیز", "تأیید", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FormDashboard dashboard = new FormDashboard();
+                    dashboard.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("نام کاربری یا رمز عبور نادرست است.", "خطا", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+    }
+}

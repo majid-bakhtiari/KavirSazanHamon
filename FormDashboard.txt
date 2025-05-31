@@ -1,0 +1,30 @@
+using System;
+using System.Windows.Forms;
+
+namespace KavirSazanHamon
+{
+    public partial class FormDashboard : Form
+    {
+        public FormDashboard()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLetters_Click(object sender, EventArgs e)
+        {
+            FormLetters lettersForm = new FormLetters();
+            lettersForm.ShowDialog();
+        }
+
+        private void btnUsers_Click(object sender, EventArgs e)
+        {
+            FormUsers usersForm = new FormUsers();
+            usersForm.ShowDialog();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
